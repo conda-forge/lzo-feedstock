@@ -24,8 +24,10 @@ nmake
 if errorlevel 1 exit 1
 
 :: Test.
-lzotest.exe -mlzo -n2 -q %SRC_DIR%/COPYING
-if errorlevel 1 exit 1
+if NOT "%CONDA_BUILD_CROSS_COMPILATION%" == "1" (
+      lzotest.exe -mlzo -n2 -q %SRC_DIR%/COPYING
+      if errorlevel 1 exit 1
+)
 
 :: Install.
 nmake install
