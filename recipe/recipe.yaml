@@ -17,9 +17,9 @@ build:
 
 requirements:
   build:
-    - cmake 3.*
     - ${{ compiler('c') }}
-    - cmake
+    - ${{ stdlib('c') }}
+    - cmake <4
     - make
   run_exports:
     - ${{ pin_subpackage('lzo') }}
@@ -48,8 +48,6 @@ about:
   description: |
     LZO offers pretty fast compression and extremely fast decompression.
     MiniLZO is a very lightweight subset of the LZO library.
-
-
   homepage: http://www.oberhumer.com/opensource/lzo/
 
 extra:
