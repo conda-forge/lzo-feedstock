@@ -1,7 +1,7 @@
 schema_version: 1
 
 context:
-  version: 2.10
+  version: "2.10"
   version_major: 2
 
 package:
@@ -13,10 +13,12 @@ source:
   sha256: c0f892943208266f9b6543b3ae308fab6284c5c90e627931446fb49b4221a072
 
 build:
-  number: 1002
+  number: 1003
 
 requirements:
   build:
+    - if: unix
+      then: gnuconfig
     - ${{ compiler('c') }}
     - ${{ stdlib('c') }}
     - cmake <4
@@ -27,20 +29,16 @@ requirements:
 tests:
   - script:
       - if: unix
-        then: test -f ${PREFIX}/include/lzo/lzoconf.h
-      - if: unix
-        then: test -f ${PREFIX}/lib/liblzo${{ version_major }}.a
+        then:
+          - test -f ${PREFIX}/include/lzo/lzoconf.h
+          - test -f ${PREFIX}/lib/liblzo${{ version_major }}.a
       - if: not win
         then: test -f ${PREFIX}/lib/liblzo${{ version_major }}${SHLIB_EXT}
-      - if: win
-        then: if not exist %PREFIX%\\Library\\include\\lzo\\lzoconf.h exit 1
-      - if: win
-        then: if not exist %PREFIX%\\Library\\lib\\lzo${{ version_major }}.lib exit 1
-      - if: win
-        then: if not exist %PREFIX%\\Library\\lib\\lzo${{ version_major }}_dllimport.lib exit 1
-      - if: win
-        then: if not exist %PREFIX%\\Library\\bin\\lzo${{ version_major }}.dll exit 1
-
+        else:
+          - if not exist %PREFIX%\\Library\\include\\lzo\\lzoconf.h exit 1
+          - if not exist %PREFIX%\\Library\\lib\\lzo${{ version_major }}.lib exit 1
+          - if not exist %PREFIX%\\Library\\lib\\lzo${{ version_major }}_dllimport.lib exit 1
+          - if not exist %PREFIX%\\Library\\bin\\lzo${{ version_major }}.dll exit 1
 about:
   license: GPL-2.0-or-later
   license_file: COPYING
@@ -54,3 +52,4 @@ extra:
   recipe-maintainers:
     - rmax
     - ocefpaf
+    - luhenry
